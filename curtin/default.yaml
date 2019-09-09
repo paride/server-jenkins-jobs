@@ -33,7 +33,6 @@
       - curtin-vmtest-devel-amd64-proposed
       - curtin-vmtest-devel-ppc64el
       - curtin-vmtest-devel-s390x
-      - curtin-vmtest-sync-images
       - curtin-vmtest-daily-x
       - curtin-vmtest-daily-b
       - curtin-vmtest-proposed-b

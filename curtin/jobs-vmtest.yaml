@@ -16,20 +16,6 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
 - job:
-    name: curtin-vmtest-sync-images
-    node: torkoal
-    triggers:
-        - timed: "H 11,23 * * *"
-    builders:
-        - shell: |
-            #!/bin/bash -x
-            rm -Rf curtin
-            git clone --branch=master https://git.launchpad.net/curtin
-            cd curtin
-
-            ./tools/vmtest-sync-images
-
-- job:
     name: curtin-vmtest-devel-amd64
     node: torkoal
     parameters:
