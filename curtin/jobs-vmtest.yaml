@@ -134,6 +134,10 @@
     name: curtin-vmtest
     builders:
         - shell: |
+            #!/bin/bash
+
+            set -efx -o pipefail
+
             if [ "$(hostname)" = "torkoal" ]; then
                 export TMPDIR=/var/lib/jenkins/tmp/
             fi
@@ -161,6 +165,17 @@
             cd curtin-${BUILD_NUMBER}
             git remote add upstream https://git.launchpad.net/curtin
             git fetch upstream --tags
+
+            lastcommit=$(git log -1 --format=%cd --date=unix) || exit 1
+            jenkins_url="http://server-team-jenkins-be.internal:8080/server"
+            lastsuccess=$(curl -Ss --fail "$jenkins_url/job/$JOB_NAME/lastSuccessfulBuild/api/json?tree=timestamp" | jq -j .timestamp) || lastsuccess=0
+            # The Jenkins timestamps are in milliseconds => divide by 1000
+            lastsuccess=$((lastsuccess/1000))
+
+            if ((lastsuccess > lastcommit)); then
+                echo "We already have a SUCCESS for the current git commit; exiting."
+                exit 0
+            fi
 
             ./tools/vmtest-system-setup
             set +e
