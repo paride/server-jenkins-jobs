@@ -30,6 +30,7 @@
         - email-server-crew
         - archive-results
     builders:
+      - curtin-vmtest-sync-images
       - vmtest-daily:
           release: xenial
           nose_args: nose_args
@@ -49,6 +50,7 @@
         - email-server-crew
         - archive-results
     builders:
+      - curtin-vmtest-sync-images
       - vmtest-daily:
           release: bionic
           nose_args: nose_args

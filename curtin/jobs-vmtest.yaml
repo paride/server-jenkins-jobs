@@ -15,19 +15,6 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
-- job:
-    name: curtin-vmtest-sync-images
-    node: torkoal
-    triggers:
-        - timed: "H 11,23 * * *"
-    builders:
-        - shell: |
-            #!/bin/bash -x
-            rm -Rf curtin
-            git clone --branch=master https://git.launchpad.net/curtin
-            cd curtin
-
-            ./tools/vmtest-sync-images
 
 - job:
     name: curtin-vmtest-devel-amd64
@@ -41,6 +28,7 @@
     triggers:
         - timed: "H 0 * * *"
     builders:
+        - curtin-vmtest-sync-images
         - curtin-vmtest
     properties:
       - build-discarder:
@@ -63,6 +51,7 @@
             default_nose_args: tests/vmtests/test_uefi_basic.py
         - vmtest-add-repos
     builders:
+        - curtin-vmtest-sync-images
         - curtin-vmtest
     properties:
       - build-discarder:
@@ -85,6 +74,7 @@
             default_nose_args: tests/vmtests/test_basic.py
         - vmtest-add-repos
     builders:
+        - curtin-vmtest-sync-images
         - curtin-vmtest
     properties:
       - build-discarder:
@@ -105,6 +95,7 @@
             default_nose_args:
         - vmtest-add-repos
     builders:
+        - curtin-vmtest-sync-images
         - curtin-vmtest
     properties:
       - build-discarder:
@@ -125,6 +116,7 @@
             default_nose_args:
         - vmtest-add-repos
     builders:
+        - curtin-vmtest-sync-images
         - curtin-vmtest
     properties:
       - build-discarder:
@@ -157,7 +149,31 @@
         - email-server-crew
         - archive-results
     builders:
+      - curtin-vmtest-sync-images
       - curtin-vmtest
+
+- builder:
+    name: curtin-vmtest-sync-images
+    builders:
+        - shell: |
+            #!/bin/bash
+
+            set -ufx -o pipefail
+
+            # The images have been updated recently enough => exit 0
+            test "$(find /srv/images/.vmtest-data -maxdepth 0 -mmin -1080)" && exit 0
+
+            # Is vmtest-sync-images already running?
+            vsc_count=$(pgrep -c vmtest-sync-images)
+            rc=$?
+            ((rc > 1)) && exit 1 # pgrep error
+            ((vsc_count == 1)) && exit 0 # vmtest-sync-images already running
+            ((vsc_count >= 2)) && exit 1 # many vmtest-sync-images running => heads-up
+
+            git clone https://git.launchpad.net/curtin curtin-sync-images || exit 1
+            cd curtin-sync-images || exit 1
+
+            ./tools/vmtest-sync-images || exit 1
 
 - builder:
     name: curtin-vmtest
