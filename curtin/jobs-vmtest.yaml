@@ -28,7 +28,6 @@
     triggers:
         - timed: "H 0 * * *"
     builders:
-        - curtin-vmtest-sync-images
         - curtin-vmtest
     properties:
       - build-discarder:
@@ -51,7 +50,6 @@
             default_nose_args: tests/vmtests/test_uefi_basic.py
         - vmtest-add-repos
     builders:
-        - curtin-vmtest-sync-images
         - curtin-vmtest
     properties:
       - build-discarder:
@@ -74,7 +72,6 @@
             default_nose_args: tests/vmtests/test_basic.py
         - vmtest-add-repos
     builders:
-        - curtin-vmtest-sync-images
         - curtin-vmtest
     properties:
       - build-discarder:
@@ -95,7 +92,6 @@
             default_nose_args:
         - vmtest-add-repos
     builders:
-        - curtin-vmtest-sync-images
         - curtin-vmtest
     properties:
       - build-discarder:
@@ -116,7 +112,6 @@
             default_nose_args:
         - vmtest-add-repos
     builders:
-        - curtin-vmtest-sync-images
         - curtin-vmtest
     properties:
       - build-discarder:
@@ -149,7 +144,6 @@
         - email-server-crew
         - archive-results
     builders:
-      - curtin-vmtest-sync-images
       - curtin-vmtest
 
 - builder:
@@ -178,6 +172,7 @@
 - builder:
     name: curtin-vmtest
     builders:
+        - curtin-vmtest-sync-images
         - shell: |
             if [ "$(hostname)" = "torkoal" ]; then
                 export TMPDIR=/var/lib/jenkins/tmp/

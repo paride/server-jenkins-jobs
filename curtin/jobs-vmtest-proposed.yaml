@@ -93,7 +93,6 @@
         - email-server-crew
         - archive-results
     builders:
-      - curtin-vmtest-sync-images
       - vmtest-proposed:
           release: xenial
 
@@ -108,7 +107,6 @@
         - email-server-crew
         - archive-results
     builders:
-      - curtin-vmtest-sync-images
       - vmtest-proposed:
           release: bionic
 
@@ -123,7 +121,6 @@
         - email-server-crew
         - archive-results
     builders:
-      - curtin-vmtest-sync-images
       - vmtest-proposed:
           release: disco
 
@@ -138,13 +135,13 @@
         - email-server-crew
         - archive-results
     builders:
-      - curtin-vmtest-sync-images
       - vmtest-proposed:
           release: eoan
 
 - builder:
     name: vmtest-proposed
     builders:
+      - curtin-vmtest-sync-images
       - shell: |
           RELEASE={release}
           TYPE="proposed"
