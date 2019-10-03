@@ -28,15 +28,18 @@
     triggers:
         - timed: "H 0 * * *"
     builders:
-        - curtin-vmtest
+        - vmtest-devel
     properties:
-      - build-discarder:
-          num-to-keep: 10
+        - build-discarder:
+            num-to-keep: 10
     publishers:
         - archive:
             artifacts: 'output/**'
             excludes: 'output/debug.log, **/*img'
         - email-server-crew
+    wrappers:
+      - timestamps
+      - workspace-cleanup
 
 - job:
     name: curtin-vmtest-devel-arm64
@@ -49,11 +52,14 @@
         - nose-args:
             default_nose_args: tests/vmtests/test_uefi_basic.py
         - vmtest-add-repos
+    wrappers:
+      - timestamps
+      - workspace-cleanup
     builders:
-        - curtin-vmtest
+        - vmtest-devel
     properties:
-      - build-discarder:
-          num-to-keep: 10
+        - build-discarder:
+            num-to-keep: 10
     publishers:
         - archive:
             artifacts: 'output/**'
@@ -72,15 +78,18 @@
             default_nose_args: tests/vmtests/test_basic.py
         - vmtest-add-repos
     builders:
-        - curtin-vmtest
+        - vmtest-devel
     properties:
-      - build-discarder:
-          num-to-keep: 10
+        - build-discarder:
+            num-to-keep: 10
     publishers:
         - archive:
             artifacts: 'output/**'
             excludes: 'output/debug.log, **/*img'
         - email-server-crew
+    wrappers:
+      - timestamps
+      - workspace-cleanup
 
 - job:
     name: curtin-vmtest-devel-s390x
@@ -92,7 +101,7 @@
             default_nose_args:
         - vmtest-add-repos
     builders:
-        - curtin-vmtest
+        - vmtest-devel
     properties:
       - build-discarder:
           num-to-keep: 10
@@ -101,6 +110,9 @@
             artifacts: 'output/**'
             excludes: 'output/debug.log, **/*img'
         - email-server-crew
+    wrappers:
+      - timestamps
+      - workspace-cleanup
 
 - job:
     name: curtin-vmtest-devel-debug
@@ -112,7 +124,7 @@
             default_nose_args:
         - vmtest-add-repos
     builders:
-        - curtin-vmtest
+        - vmtest-devel
     properties:
       - build-discarder:
           num-to-keep: 5
@@ -120,6 +132,9 @@
         - archive:
             artifacts: 'output/**'
             excludes: 'output/debug.log, **/*img'
+    wrappers:
+      - timestamps
+      - workspace-cleanup
 
 - job:
     name: curtin-vmtest-devel-amd64-proposed
@@ -144,10 +159,13 @@
         - email-server-crew
         - archive-results
     builders:
-      - curtin-vmtest
+      - vmtest-devel
+    wrappers:
+      - timestamps
+      - workspace-cleanup
 
 - builder:
-    name: curtin-vmtest-sync-images
+    name: vmtest-sync-images
     builders:
         - shell: |
             #!/bin/bash
@@ -170,9 +188,9 @@
             ./tools/vmtest-sync-images || exit 1
 
 - builder:
-    name: curtin-vmtest
+    name: vmtest-devel
     builders:
-        - curtin-vmtest-sync-images
+        - vmtest-sync-images
         - shell: |
             if [ "$(hostname)" = "torkoal" ]; then
                 export TMPDIR=/var/lib/jenkins/tmp/
@@ -195,8 +213,6 @@
             # export CURTIN_VMTEST_KEEP_DATA_FAIL=all
             # export CURTIN_VMTEST_TAR_DISKS=1
 
-            rm -Rf curtin-*
-            rm -Rf output
             git clone --branch=${landing_candidate_branch} ${landing_candidate} curtin-${BUILD_NUMBER}
             cd curtin-${BUILD_NUMBER}
             git remote add upstream https://git.launchpad.net/curtin

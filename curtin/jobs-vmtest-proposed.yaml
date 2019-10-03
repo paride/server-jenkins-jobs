@@ -22,7 +22,9 @@
     triggers:
       - timed: "H 10 * * 1,4"
     publishers:
-        - email-server-crew
+      - email-server-crew
+    wrappers:
+      - workspace-cleanup
     builders:
       - vmtest-proposed-trigger:
           release: xenial
@@ -34,7 +36,9 @@
     triggers:
       - timed: "H 10 * * 2,5"
     publishers:
-        - email-server-crew
+      - email-server-crew
+    wrappers:
+      - workspace-cleanup
     builders:
       - vmtest-proposed-trigger:
           release: bionic
@@ -46,7 +50,9 @@
     triggers:
       - timed: "H 10 * * 3"
     publishers:
-        - email-server-crew
+      - email-server-crew
+    wrappers:
+      - workspace-cleanup
     builders:
       - vmtest-proposed-trigger:
           release: disco
@@ -58,7 +64,9 @@
     triggers:
       - timed: "H 10 * * 7"
     publishers:
-        - email-server-crew
+      - email-server-crew
+    wrappers:
+      - workspace-cleanup
     builders:
       - vmtest-proposed-trigger:
           release: eoan
@@ -72,7 +80,6 @@
           set -e
           release={release}
           triggerwhat={triggerwhat}
-          rm -rf *
 
           git clone https://github.com/CanonicalLtd/server-test-scripts
           cd server-test-scripts/launchpad/
@@ -92,6 +99,9 @@
     publishers:
         - email-server-crew
         - archive-results
+    wrappers:
+      - timestamps
+      - workspace-cleanup
     builders:
       - vmtest-proposed:
           release: xenial
@@ -106,6 +116,9 @@
     publishers:
         - email-server-crew
         - archive-results
+    wrappers:
+      - timestamps
+      - workspace-cleanup
     builders:
       - vmtest-proposed:
           release: bionic
@@ -120,6 +133,9 @@
     publishers:
         - email-server-crew
         - archive-results
+    wrappers:
+      - timestamps
+      - workspace-cleanup
     builders:
       - vmtest-proposed:
           release: disco
@@ -134,6 +150,9 @@
     publishers:
         - email-server-crew
         - archive-results
+    wrappers:
+      - timestamps
+      - workspace-cleanup
     builders:
       - vmtest-proposed:
           release: eoan
@@ -141,7 +160,7 @@
 - builder:
     name: vmtest-proposed
     builders:
-      - curtin-vmtest-sync-images
+      - vmtest-sync-images
       - shell: |
           RELEASE={release}
           TYPE="proposed"
@@ -152,7 +171,6 @@
           export CURTIN_VMTEST_TAR_DISKS=1
           export CURTIN_VMTEST_SKIP_BY_DATE_BUGS="*"
 
-          rm -Rf curtin-* output
           pull-lp-source curtin "$RELEASE"-proposed
           cd curtin-*
           PATH="$PWD/tools:$PATH"

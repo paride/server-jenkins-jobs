@@ -26,8 +26,9 @@
             fail: true
     builders:
         - shell: |
-            #!/bin/bash -x
-            rm -rf *
+            #!/bin/bash
+            set -eux
+
             launchpadTrigger --lock-name=${JOB_NAME} \
                              --job=curtin-ci \
                              --branch=lp:curtin \
@@ -95,12 +96,14 @@
             MERGE_URL=${merge_proposal}
             TEST_RESULT=PASSED
             TEST_URL=${BUILD_URL}
+    wrappers:
+        - timestamps
+        - workspace-cleanup
     builders:
         - shell: |
             #!/bin/bash
             set -eux
 
-            rm -rf *
             branch=${landing_candidate//lp:/https://git.launchpad.net/}
             git clone --branch=${landing_candidate_branch} $branch curtin-${BUILD_NUMBER}
             cd curtin-${BUILD_NUMBER}
@@ -148,12 +151,14 @@
             MERGE_URL=${merge_proposal}
             TEST_RESULT=PASSED
             TEST_URL=${BUILD_URL}
+    wrappers:
+      - timestamps
+      - workspace-cleanup
     builders:
       - shell: |
           #!/bin/bash
           set -eux
 
-          rm -rf *
           git clone lp:curtin
           cd curtin
 
