@@ -1,3 +1,4 @@
+---
 # Ubuntu Server QA Jenkins Jobs
 # Copyright (C) 2017 Canonical Ltd.
 #
@@ -19,46 +20,45 @@
     name: curtin-vmtest-daily-x
     node: torkoal
     parameters:
-        - nose-args:
-            default_nose_args:
+      - nose-args:
+          default_nose_args:
     triggers:
-        - timed: "H 4 * * 1,3,5"
+      - timed: "H 4 * * 1,3,5"
     properties:
-        - build-discarder:
-            num-to-keep: 5
+      - build-discarder:
+          num-to-keep: 5
     publishers:
-        - email-server-crew
-        - archive-results
+      - email-server-crew
+      - archive-results
     wrappers:
-        - timestamps
-        - workspace-cleanup
+      - timestamps
+      - workspace-cleanup
     builders:
-        - vmtest-daily:
-            release: xenial
-            nose_args: nose_args
+      - vmtest-daily:
+          release: xenial
+          nose_args: nose_args
 
 - job:
     name: curtin-vmtest-daily-b
     node: torkoal
     parameters:
-        - nose-args:
-            default_nose_args:
+      - nose-args:
+          default_nose_args:
     triggers:
-        - timed: "H 4 * * 2,4,6"
+      - timed: "H 4 * * 2,4,6"
     properties:
       - build-discarder:
           num-to-keep: 5
     publishers:
-        - email-server-crew
-        - archive-results
+      - email-server-crew
+      - archive-results
     wrappers:
-        - timestamps
-        - workspace-cleanup
+      - timestamps
+      - workspace-cleanup
     builders:
-        - vmtest-daily:
-            release: bionic
-            nose_args: nose_args
-
+      - vmtest-daily:
+          release: bionic
+          nose_args: nose_args
 
 - builder:
     name: vmtest-daily

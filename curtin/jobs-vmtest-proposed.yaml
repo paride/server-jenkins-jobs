@@ -1,3 +1,4 @@
+---
 # Ubuntu Server QA Jenkins Jobs
 # Copyright (C) 2017 Canonical Ltd.
 #
@@ -72,7 +73,6 @@
           release: eoan
           triggerwhat: curtin-vmtest-proposed-e
 
-
 - builder:
     name: vmtest-proposed-trigger
     builders:
@@ -89,6 +89,7 @@
             curl -X POST --netrc-file $JENKINS_HOME/jenkins-bot-creds http://server-team-jenkins-be.internal:8080/server/job/$triggerwhat/build?token=BUILD_ME
           fi
 
+
 - job:
     name: curtin-vmtest-proposed-x
     node: torkoal
@@ -97,8 +98,8 @@
       - build-discarder:
           num-to-keep: 5
     publishers:
-        - email-server-crew
-        - archive-results
+      - email-server-crew
+      - archive-results
     wrappers:
       - timestamps
       - workspace-cleanup
@@ -114,8 +115,8 @@
       - build-discarder:
           num-to-keep: 5
     publishers:
-        - email-server-crew
-        - archive-results
+      - email-server-crew
+      - archive-results
     wrappers:
       - timestamps
       - workspace-cleanup
@@ -131,8 +132,8 @@
       - build-discarder:
           num-to-keep: 5
     publishers:
-        - email-server-crew
-        - archive-results
+      - email-server-crew
+      - archive-results
     wrappers:
       - timestamps
       - workspace-cleanup
@@ -148,8 +149,8 @@
       - build-discarder:
           num-to-keep: 5
     publishers:
-        - email-server-crew
-        - archive-results
+      - email-server-crew
+      - archive-results
     wrappers:
       - timestamps
       - workspace-cleanup
