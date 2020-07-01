@@ -22,7 +22,7 @@
     wrappers:
         # We run every 15 minutes, and runs usually take a few seconds
         - timeout:
-            timeout: 15
+            timeout: 42
     builders:
         - shell: |
             #!/bin/bash -x
@@ -37,6 +37,7 @@
 - job:
     name: curtin-autoland-trigger
     node: metal-amd64
+     nodexxx: metal-amd64xxx
     triggers:
         - timed: H/15 * * * *
     wrappers:
