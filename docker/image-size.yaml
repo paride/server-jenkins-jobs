@@ -39,7 +39,7 @@
           description: "Ubuntu docker tag to pull."
       - string:
           name: MAXSIZE
-          default: !j2: "{{ {'latest': 72, 'rolling': 80, 'devel': 80}[dockertag] }}"
+          default: !j2: "{{ {'latest': 75, 'rolling': 80, 'devel': 80}[dockertag] }}"
           description: 'Maximum size of the Docker image'
     triggers:
       - timed: '@daily'
