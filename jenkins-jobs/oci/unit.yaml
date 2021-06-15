@@ -50,7 +50,7 @@
     name: oci-unit-{testcase}-standalone
     defaults: oci
     triggers:
-      - timed: '@daily'
+      - timed: '@weekly'
     parameters:
       - git-params-server-test-scripts
     wrappers:
@@ -90,6 +90,8 @@
 - job-template:
     name: oci-unit-{testcase}
     defaults: oci
+    triggers:
+      - timed: '@weekly'
     project-type: matrix
     execution-strategy:
       sequential: true
