@@ -106,11 +106,6 @@
             - metal-s390x
       - axis:
           type: user-defined
-          name: DOCKER_REGISTRY
-          values:
-            - public.ecr.aws
-      - axis:
-          type: user-defined
           name: DOCKER_NAMESPACE
           values: '{namespaces}'
       - axis:
@@ -120,6 +115,11 @@
             - edge
     parameters:
       - git-params-server-test-scripts
+      - choice:
+          name: DOCKER_REGISTRY
+          choices:
+            - public.ecr.aws
+            - docker.io
     wrappers:
       - timeout:
           timeout: 90
