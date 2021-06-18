@@ -61,7 +61,7 @@
           set -ex
 
           git clone --depth 1 https://github.com/canonical/server-test-scripts
-          git clone --single-branch --branch {branch|master} https://github.com/canonical/cloud-init
+          git clone --single-branch --branch {branch|main} https://github.com/canonical/cloud-init
           pushd cloud-init
 
           export http_proxy="http://squid.internal:3128"
