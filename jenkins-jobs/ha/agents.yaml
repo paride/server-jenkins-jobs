@@ -15,17 +15,26 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
-- project:
-    name: ha-fence-agents
+- ha-agents-test-common: &ha-agents-test-common
+    name: ha-agents-test-common
     release:
       - impish
-    testcase:
+
+- project:
+    name: ha-agents-virsh
+    <<: *ha-agents-test-common
+    cloud:
       - virsh
+    test:
+      - fence_virsh
+      - resource_ipaddr2
+      - resource_lvm-activate
+      - resource_systemd
     jobs:
-      - ha-fence-{testcase}-{release}
+      - ha-agent-{cloud}-{release}-{test}
 
 - job-template:
-    name: ha-fence-{testcase}-{release}
+    name: ha-agent-{cloud}-{release}-{test}
     defaults: ha
     wrappers:
       - timeout:
@@ -44,11 +53,9 @@
 
             set -eux
 
-            export UBUNTU_SERIES={release}
-
             git clone --depth 1 -b "$STSBRANCH" "$STSREPO" sts
-            cd sts/ha/{testcase}
-            ./run_tests.sh
+            cd sts/ha/{cloud}
+            TESTS="tests/{test}_test.sh" UBUNTU_SERIES={release} ./run_tests.sh
     publishers:
       - email:
           recipients: server-crew-qa@lists.canonical.com lucas.kanashiro@canonical.com
