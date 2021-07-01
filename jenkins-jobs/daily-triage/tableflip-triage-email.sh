@@ -18,7 +18,7 @@ command -v ubuntu-bug-triage
 
 
 # Projects to triage
-projects=(cloud-init cloud-utils simplestreams)
+projects=(cloud-init cloud-utils simplestreams ubuntu-advantage-tools)
 github_projects=(cloud-init pycloudlib)
 ndays_new_bugs=90
 
