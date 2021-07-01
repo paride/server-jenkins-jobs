@@ -23,7 +23,7 @@ github_projects=(cloud-init pycloudlib)
 ndays_new_bugs=90
 
 # GitHub usernames of team members, comma-separated for use in jq filters
-team_members="blackboxsw,OddBloke,TheRealFalcon,lucasmoura,mitechie,paride"
+team_members="blackboxsw,TheRealFalcon,lucasmoura,mitechie,paride,orndorffgrant"
 
 
 # Find today's triager. On Mondays triage the weekend's bugs.
