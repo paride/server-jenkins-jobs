@@ -34,7 +34,7 @@
       - build-discarder:
           num-to-keep: 3
     publishers:
-      - email-server-crew-qa
+      - email-curtin-qa
 
 - publisher:
     name: curtin-archive-results
@@ -46,6 +46,5 @@
 - publisher:
     name: email-curtin-qa
     publishers:
-      - email-server-crew-qa
       - email:
           recipients: michael.hudson@canonical.com
