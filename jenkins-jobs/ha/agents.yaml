@@ -33,6 +33,7 @@
       - resource_systemd
     jobs:
       - ha-agent-{cloud}-{release}-{test}
+      - ha-agent-{cloud}-{release}-all
 
 - job-template:
     name: ha-agent-{cloud}-{release}-{test}
@@ -48,6 +49,34 @@
     triggers:
       - timed: '@daily'
     builders:
+      - ha-agent-run-test:
+          cloud: '{cloud}'
+          release: '{release}'
+          test: '{test}'
+    publishers:
+      - email:
+          recipients: server-crew-qa@lists.canonical.com lucas.kanashiro@canonical.com
+
+- job-template:
+    name: ha-agent-{cloud}-{release}-all
+    defaults: ha
+    wrappers:
+      - timeout:
+          timeout: 240
+          fail: true
+      - timestamps
+      - workspace-cleanup
+    parameters:
+      - git-params-server-test-scripts
+    builders:
+      - ha-agent-run-test:
+          cloud: '{cloud}'
+          release: '{release}'
+          test: '*'
+
+- builder:
+    name: ha-agent-run-test
+    builders:
       - shell:
           command: |
             #!/bin/sh
@@ -57,6 +86,3 @@
             git clone --depth 1 -b "$STSBRANCH" "$STSREPO" sts
             cd sts/ha/{cloud}
             TESTS="tests/{test}_test.sh" UBUNTU_SERIES={release} ./run_tests.sh
-    publishers:
-      - email:
-          recipients: server-crew-qa@lists.canonical.com lucas.kanashiro@canonical.com
