@@ -126,6 +126,13 @@
           fail: true
       - timestamps
       - workspace-cleanup
+      - credentials-binding:
+          - file:
+              credential-id: aws-ecr-ro-config
+              variable: AWS_CONFIG_FILE
+          - file:
+              credential-id: aws-ecr-ro-credentials
+              variable: AWS_SHARED_CREDENTIALS_FILE
     builders:
       - shell:
           unstable-return: 99
